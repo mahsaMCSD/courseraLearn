@@ -18,17 +18,39 @@ function App() {
   });
   const [role, setRole] = useState("role");
 
+  const handlePasswordChange = (e) => {
+    if (e.target.value) {
+      setPassword({ ...password, value: e.target.value });
+    }
+  };
+
   const getIsFormValid = () => {
     // Implement this function
-    return true;
+    if (
+      firstName &&
+      email &&
+      validateEmail(email) &&
+      password.value.length >= 8 &&
+      role !== "role"
+    ) {
+      return true;
+    } else return false;
   };
 
   const clearForm = () => {
     // Implement this function
+    setFirstName("");
+    setEmail("");
+    setLastName("");
+    setPassword("");
+    setRole("");
   };
 
-  const handleSubmit = () => {
-    alert("Account created!");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (getIsFormValid()) {
+      alert("Account created!");
+    }
     clearForm();
   };
 
@@ -41,29 +63,52 @@ function App() {
             <label>
               First name <sup>*</sup>
             </label>
-            <input value={firstName} placeholder="First name" onChange={ (e)=>setFirstName(e.target.value)}/>
+            <input
+              value={firstName}
+              placeholder="First name"
+              onChange={(e) => setFirstName(e.target.value)}
+            />
           </div>
           <div className="Field">
             <label>Last name</label>
-            <input value={lastName} placeholder="Last name"  onChange={ (e)=>setLastName(e.target.value)}/>
+            <input
+              value={lastName}
+              placeholder="Last name"
+              onChange={(e) => setLastName(e.target.value)}
+            />
           </div>
           <div className="Field">
             <label>
               Email address <sup>*</sup>
             </label>
-            <input value={email} placeholder="Email address"  onChange={ (e)=>setEmail(e.target.value)}/>
+            <input
+              value={email}
+              placeholder="Email address"
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <div className="Field">
             <label>
               Password <sup>*</sup>
             </label>
-            <input type={password} value={password.value} placeholder="Password"  onChange={ (e)=>setPassword(e.target.value)}/>
+            <input
+              type={password}
+              value={password.value}
+              placeholder="Password"
+              onChange={handlePasswordChange}
+              onBlur={() => {
+                setPassword({ ...password, isTouched: true });
+              }}
+            />
+            {password.isTouched && password.value.length < 8 ? (
+              <PasswordErrorMessage />
+            ) : null}
           </div>
           <div className="Field">
             <label>
               Role <sup>*</sup>
             </label>
-            <select  onChange={ (e)=>setRole(e.target.value)} value={role}>
+            <select onChange={(e) => setRole(e.target.value)} value={role}>
               <option value="role">Role</option>
               <option value="individual">Individual</option>
               <option value="business">Business</option>
