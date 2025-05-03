@@ -45,7 +45,7 @@ const LandingSection = () => {
         response,
       })
         .then((res) => {
-          if (res.type === success) {
+          if (res.type === "success") {
             onOpen(
               "success","Your message has been sent successfully"
             );
